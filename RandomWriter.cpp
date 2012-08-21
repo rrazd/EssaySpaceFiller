@@ -12,8 +12,9 @@ using namespace std;
 string FileNamePrompt();
 int OrderPrompt();
 string InitialSeedFinder(int order, string fileName);
-void ChooseNextChar(string seed, int order, string fileName);
+char ChooseNextChar(string seed, int order, string fileName);
 char MostFequentCharInVector(string seed, Map<string, Vector<char> > nextCharMap);
+string UpdateSeed(string seed, char nextChosenChar);    
 
 /****************************************************************/
 int main() {
@@ -23,10 +24,21 @@ int main() {
     cout << "Order entered: " << order << "\n";
     string seed = InitialSeedFinder(order, fileName);
     cout << "\nInitial seed: " << seed << "\n";
-    ChooseNextChar(seed, order, fileName);
+  
+    //generating text
+    cout<<seed;
+    int count = 0;
+    char nextChosenChar = ChooseNextChar(seed, order, fileName);
+    while (count <= (2000/order) || nextChosenChar != EOF) {
+        cout<<nextChosenChar;
+        nextChosenChar = ChooseNextChar(seed, order, fileName);
+        seed = UpdateSeed(seed, nextChosenChar);    
+        count++;
+    }  
 	return 0;
 }
 /****************************************************************/
+
 
 string FileNamePrompt(){
     ifstream inputStream;
@@ -34,29 +46,27 @@ string FileNamePrompt(){
     cout << "Enter a file name: ";
     cin>>fileName;
     inputStream.open(fileName.c_str());
-    
     while (inputStream.fail()) {
         cout << "Enter a file name: ";
         cin>>fileName;
         inputStream.open(fileName.c_str());
     }
-    
     inputStream.close();
     return fileName;
 }
+
 
 int OrderPrompt(){
     int orderGiven = 0;
     cout << "Enter the order number: ";
     cin >> orderGiven;
-    
     while (orderGiven < 0 || orderGiven > 10) {
         cout << "Enter the order number: ";
         cin >> orderGiven;
-    }
-    
+    }    
     return orderGiven;
 }
+
 
 string InitialSeedFinder(int order, string fileName){
     string seed; 
@@ -66,7 +76,6 @@ string InitialSeedFinder(int order, string fileName){
     int offset = 0;
     inputStream.clear();
     char* buffer = new char [order];
-
     //get all k char sequence
     while (inputStream.get() != EOF) {    
         inputStream.seekg(offset);
@@ -78,10 +87,9 @@ string InitialSeedFinder(int order, string fileName){
         else {
             frequencyMap.put(key, 1);
         } 
-         offset++;
+        offset++;
     }
     inputStream.close();
-    
     //go through and find the most frequent key
     int greatestFrequency = 0;
     int frequency = 0;
@@ -96,7 +104,8 @@ string InitialSeedFinder(int order, string fileName){
     return seed;
 }
 
-void ChooseNextChar(string seed, int order, string fileName){
+
+char ChooseNextChar(string seed, int order, string fileName){
     Map<string, Vector<char> > nextCharMap;
     ifstream inputStream;
     inputStream.open(fileName.c_str());
@@ -122,28 +131,39 @@ void ChooseNextChar(string seed, int order, string fileName){
     }
     //case where no chars following seed
     if (nextCharMap[seed].isEmpty()) {
-        return;
+        return EOF;
     }
     //determine which is the most frequent following char
     char nextChosenChar = MostFequentCharInVector(seed, nextCharMap);
-    
-    
-//DEBUGGING-----------------------------------------    
-//    foreach(string key in nextCharMap){
-//        cout<<key<<": ";
-//        foreach(char element in nextCharMap[key]){
-//            cout<< element;
-//        }
-//        cout<<"\n";
-//    }
-
+    return nextChosenChar;
 }
+
 
 char MostFequentCharInVector(string seed, Map<string, Vector<char> > nextCharMap){
     //iterate over chars
+    Map<char, int> mostFrequentCharMap;
     foreach(char element in nextCharMap[seed]){
-        
+        if (mostFrequentCharMap.containsKey(element)) {
+            mostFrequentCharMap[element] = mostFrequentCharMap[element] + 1;
+        }
+        else {
+            mostFrequentCharMap.put(element, 1);
+        }
     }
+    int maxFrequency = 0;
+    char mostFrequenctChar;
+    foreach(char key in mostFrequentCharMap){
+        if (mostFrequentCharMap[key] > maxFrequency) {
+            maxFrequency = mostFrequentCharMap[key];
+            mostFrequenctChar = key;
+        }     
+    }
+    return mostFrequenctChar;
+}
+
+
+string UpdateSeed(string seed, char nextChosenChar){
+    
 }
 
 
