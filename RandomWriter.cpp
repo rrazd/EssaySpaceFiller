@@ -24,7 +24,7 @@ int main() {
     cout << "Order entered: " << order << "\n";
     string seed = InitialSeedFinder(order, fileName);
     cout << "\nInitial seed: " << seed << "\n";
-  
+    
     //generating text
     cout<<seed;
     int count = 0;
@@ -116,7 +116,7 @@ char ChooseNextChar(string seed, int order, string fileName){
     inputStream.clear();
     char* buffer = new char [order + 1];
     char charFollowingSeed;
-    while (inputStream.get() != EOF) {    
+    while (!inputStream.eof()) {    
         inputStream.seekg(offset);
         inputStream.read(buffer, order + 1);
         string key(buffer, order);
@@ -153,14 +153,19 @@ char MostFequentCharInVector(string seed, Map<string, Vector<char> > nextCharMap
         }
     }
     int maxFrequency = 0;
-    char mostFrequenctChar;
+    char mostFrequentChar;
     foreach(char key in mostFrequentCharMap){
         if (mostFrequentCharMap[key] > maxFrequency) {
             maxFrequency = mostFrequentCharMap[key];
-            mostFrequenctChar = key;
-        }     
+            mostFrequentChar = key;
+        }
+        if (mostFrequentCharMap[key] == maxFrequency) {
+            if(randomChance(0.50)){
+                mostFrequentChar = key;      
+            }
+        }
     }
-    return mostFrequenctChar;
+    return mostFrequentChar;
 }
 
 
