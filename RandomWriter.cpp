@@ -12,6 +12,7 @@ using namespace std;
 string FileNamePrompt();
 int OrderPrompt();
 string InitialSeedFinder(int order, string fileName);
+void ChooseNextChar(string seed, int order, string fileName);
 
 /****************************************************************/
 int main() {
@@ -21,6 +22,7 @@ int main() {
     cout << "Order entered: " << order << "\n";
     string seed = InitialSeedFinder(order, fileName);
     cout << "\nInitial seed: " << seed << "\n";
+    ChooseNextChar(seed, order, fileName);
 	return 0;
 }
 /****************************************************************/
@@ -92,3 +94,44 @@ string InitialSeedFinder(int order, string fileName){
     }
     return seed;
 }
+
+void ChooseNextChar(string seed, int order, string fileName){
+    Map<string, Vector<char> > nextCharMap;
+    ifstream inputStream;
+    inputStream.open(fileName.c_str());
+    int offset = 0;
+    Vector<char> charsFollingSeedVector;
+    inputStream.clear();
+    char* buffer = new char [order + 1];
+    char charFollowingSeed;
+    while (inputStream.get() != EOF) {    
+        inputStream.seekg(offset);
+        inputStream.read(buffer, order + 1);
+        string key(buffer, order);
+        if (equalsIgnoreCase(key, seed)) {
+            //only insert key if not present otherwise overwriting old info 
+            if (!nextCharMap.containsKey(seed)) {
+                nextCharMap.put(seed, charsFollingSeedVector);
+            }
+            //read the char directly following seed
+            charFollowingSeed = buffer[order];
+            nextCharMap[seed].push_back(charFollowingSeed);
+        }
+        offset++;
+    }
+    //case where no chars following seed
+    if (nextCharMap[seed].isEmpty()) {
+        return;
+    }
+    
+//DEBUGGING-----------------------------------------    
+//    foreach(string key in nextCharMap){
+//        cout<<key<<": ";
+//        foreach(char element in nextCharMap[key]){
+//            cout<< element;
+//        }
+//        cout<<"\n";
+//    }
+
+}
+
