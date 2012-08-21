@@ -13,6 +13,7 @@ string FileNamePrompt();
 int OrderPrompt();
 string InitialSeedFinder(int order, string fileName);
 void ChooseNextChar(string seed, int order, string fileName);
+char MostFequentCharInVector(string seed, Map<string, Vector<char> > nextCharMap);
 
 /****************************************************************/
 int main() {
@@ -123,6 +124,9 @@ void ChooseNextChar(string seed, int order, string fileName){
     if (nextCharMap[seed].isEmpty()) {
         return;
     }
+    //determine which is the most frequent following char
+    char nextChosenChar = MostFequentCharInVector(seed, nextCharMap);
+    
     
 //DEBUGGING-----------------------------------------    
 //    foreach(string key in nextCharMap){
@@ -134,4 +138,12 @@ void ChooseNextChar(string seed, int order, string fileName){
 //    }
 
 }
+
+char MostFequentCharInVector(string seed, Map<string, Vector<char> > nextCharMap){
+    //iterate over chars
+    foreach(char element in nextCharMap[seed]){
+        
+    }
+}
+
 
