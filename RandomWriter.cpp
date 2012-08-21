@@ -14,7 +14,7 @@ int OrderPrompt();
 string InitialSeedFinder(int order, string fileName);
 char ChooseNextChar(string seed, int order, string fileName);
 char MostFequentCharInVector(string seed, Map<string, Vector<char> > nextCharMap);
-string UpdateSeed(string seed, char nextChosenChar);    
+string UpdateSeed(string seed, char nextChosenChar, int order);    
 
 /****************************************************************/
 int main() {
@@ -28,11 +28,13 @@ int main() {
     //generating text
     cout<<seed;
     int count = 0;
-    char nextChosenChar = ChooseNextChar(seed, order, fileName);
-    while (count <= (2000/order) || nextChosenChar != EOF) {
-        cout<<nextChosenChar;
+    //dummy initialization
+    char nextChosenChar = 'a';
+    int limit = 2000/order;
+    while (count <= limit && nextChosenChar != EOF) {
         nextChosenChar = ChooseNextChar(seed, order, fileName);
-        seed = UpdateSeed(seed, nextChosenChar);    
+        cout<<nextChosenChar;
+        seed = UpdateSeed(seed, nextChosenChar, order);    
         count++;
     }  
 	return 0;
@@ -162,8 +164,11 @@ char MostFequentCharInVector(string seed, Map<string, Vector<char> > nextCharMap
 }
 
 
-string UpdateSeed(string seed, char nextChosenChar){
-    
+string UpdateSeed(string seed, char nextChosenChar, int order){
+    seed = seed + nextChosenChar;
+    seed = seed.substr(1, order);
+    cout<<seed;
+    return seed;
 }
 
 
