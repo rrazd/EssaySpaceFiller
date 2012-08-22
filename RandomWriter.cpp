@@ -23,16 +23,19 @@ int main() {
     int order = OrderPrompt();
     cout << "Order entered: " << order << "\n";
     string seed = InitialSeedFinder(order, fileName);
-    cout << "\nInitial seed: " << seed << "\n";
+    cout << "Initial seed: " << seed << "\n\n";
     
     //generating text
     cout<<seed;
     int count = 0;
     //dummy initialization
-    char nextChosenChar = 'a';
-    int limit = 2000/order;
-    while (count <= limit && nextChosenChar != EOF) {
+    char nextChosenChar;
+    int limit = 500/order;
+    while (count <= limit) {
         nextChosenChar = ChooseNextChar(seed, order, fileName);
+        if (nextChosenChar == EOF) {
+            return 0;
+        }
         cout<<nextChosenChar;
         seed = UpdateSeed(seed, nextChosenChar, order);    
         count++;
@@ -62,8 +65,8 @@ int OrderPrompt(){
     int orderGiven = 0;
     cout << "Enter the order number: ";
     cin >> orderGiven;
-    while (orderGiven < 0 || orderGiven > 10) {
-        cout << "Enter the order number: ";
+    while (orderGiven < 0 || orderGiven > 31) {
+        cout << "Enter the order number between 1 and 30: ";
         cin >> orderGiven;
     }    
     return orderGiven;
@@ -116,6 +119,8 @@ char ChooseNextChar(string seed, int order, string fileName){
     inputStream.clear();
     char* buffer = new char [order + 1];
     char charFollowingSeed;
+    int consecutiveSpecialChars_Spaces = 0;
+    int consecutiveSpecialChars_NewLines = 0;
     while (!inputStream.eof()) {    
         inputStream.seekg(offset);
         inputStream.read(buffer, order + 1);
@@ -137,6 +142,23 @@ char ChooseNextChar(string seed, int order, string fileName){
     }
     //determine which is the most frequent following char
     char nextChosenChar = MostFequentCharInVector(seed, nextCharMap);
+    //TRYING TO FIX PROBLEM OF ONLY OUTPUTTING SPACES
+     if (nextChosenChar == ' ') {
+        consecutiveSpecialChars_Spaces++;
+        if (consecutiveSpecialChars_Spaces == 2) {
+            nextChosenChar = nextCharMap[seed].get(randomInteger(0, nextCharMap[seed].size()-1));
+            consecutiveSpecialChars_Spaces = 0;
+        }
+    }
+    //TRYING TO FIX PROBLEM OF ONLY OUTPUTTING NEWLINES
+    if (nextChosenChar == '\n') {
+        consecutiveSpecialChars_NewLines++;
+        if (consecutiveSpecialChars_NewLines == 1) {
+            nextChosenChar = nextCharMap[seed].get(randomInteger(0, nextCharMap[seed].size()-1));
+            consecutiveSpecialChars_NewLines = 0;
+        }
+    }
+
     return nextChosenChar;
 }
 
