@@ -29,4 +29,7 @@ were seen as spaces as well and so the random text that was generated was just a
 them were cumbersome and tedious to implement.
 
 <h3>Running the Code</h3>
-I created a Makefile
+Use the makefile I created to run the application. Pull the repository to a location. Go to the directory via 
+terminal and run make. This will launch the application. 
+Note that I utilized some of Stanford's Libraries for C++. They provided the ability to use a foreach loop
+to iterate over Maps and Vectors conveniantly amongst some other useful features. 
