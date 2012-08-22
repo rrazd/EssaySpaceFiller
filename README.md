@@ -12,6 +12,12 @@ based on some input text. My method was a bit more 'rough' and you may notice th
 even at the highest accuracy order of 20, the output is not plausible enough
 to allow the reader to be fooled into passing the generated paragraph off as unsuspicous!
 
+<h3>My implementation Vs. Traditional Markov Model</h3>
+My program always outputs the one character following the current seed that has the highest probability. 
+The way most Markov chains are implemented is, after every character that is output, it generates 
+an entire probability distribution of possible characters and subsequently chooses one of them randomly, 
+according to the probability distribution calculated. 
+
 <h3>Lessons learnt</h3>
 I realized after finishing the implementation that when using Markov models and
 similar analysis for natural language processing one should almost
@@ -23,3 +29,4 @@ were seen as spaces as well and so the random text that was generated was just a
 them were cumbersome and tedious to implement.
 
 <h3>Running the Code</h3>
+I created a Makefile
