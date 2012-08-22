@@ -30,7 +30,7 @@ int main() {
     int count = 0;
     //dummy initialization
     char nextChosenChar;
-    int limit = 500/order;
+    int limit = 700/order;
     while (count <= limit) {
         nextChosenChar = ChooseNextChar(seed, order, fileName);
         if (nextChosenChar == EOF) {
