@@ -65,7 +65,7 @@ int OrderPrompt(){
     int orderGiven = 0;
     cout << "Enter the order number: ";
     cin >> orderGiven;
-    while (orderGiven < 10 || orderGiven > 21) {
+    while (orderGiven < 9 || orderGiven > 21) {
         cout << "Enter the order number between 10 and 20: ";
         cin >> orderGiven;
     }    
